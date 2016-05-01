@@ -114,28 +114,18 @@
 				$('[data-constraints]',form).trigger('validate.form')
 				
 				if(!$('label.'+opt.invalidClass+',label.'+opt.emptyClass,form).length){					
-					$.ajax({
-						type:"POST"
-						,url:opt.mailHandlerURL
-						,data:{
-							name:getValue($('label.name input'))
-							,email:getValue($('label.email input'))
-							,phone:getValue($('label.phone input'))
-							,fax:getValue($('label.fax input'))
-							,state:getValue($('label.state input'))
-							,message:getValue($('label.message textarea'))
-							,owner_email:opt.ownerEmail||'#'
-							,stripHTML:opt.stripHTML
-						}
-						,success: function(e){							
-							form.addClass(opt.successClass)
-							setTimeout(function(){
-								form
-								.removeClass(opt.successClass)
-								.trigger('reset')
-							},opt.successShowDelay)
-						}
-					})					
+					name = getValue($('label.name input'));
+					email = getValue($('label.email input'));
+					content = "Message: " + getValue($('label.message textarea'));
+					content += "Phone: " + getValue($('label.phone input'));
+					content += "Email: " + email;
+					emailjs.send("zoho", "template_DZL4Hxp2", {"from_name":  name, "message_html": content});
+					form.addClass(opt.successClass)
+					setTimeout(function(){
+						form
+						.removeClass(opt.successClass)
+						.trigger('reset')
+					},opt.successShowDelay);	
 				}				
 				return false
 			}
